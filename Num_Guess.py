@@ -1,25 +1,62 @@
-"""This is a simple number guessing game where the user has to guess a randomly generated number within a specified range."""
 import random
-GAME_RUNNING = True
-LOWER_BOUND = 1
-UPPER_BOUND = 100
-NUMBER_TO_GUESS = random.randint(LOWER_BOUND, UPPER_BOUND)
-MAX_ATTEMPTS = 10
-attempts = 0
-print(f"Welcome to the Number Guessing Game! I'm thinking of a number between {LOWER_BOUND} and {UPPER_BOUND}. You have {MAX_ATTEMPTS} attempts to guess it.")
-while GAME_RUNNING and attempts < MAX_ATTEMPTS:
+
+lowerBound = 1
+upperBound = 10
+maxAttempts = 10
+currentAttempts = 0
+numberToGuess = random.randint(lowerBound,upperBound)
+gameRunning = True
+gameContinue = False
+exitCondition = True
+
+print(f"Welcome To My Number Guessing Game where you would guess the number from {lowerBound} to {upperBound}."
+      f"Goodluck!\nEnter zero to Exit")
+
+def playerInput():
+    global  currentAttempts
     try:
-        user_guess = int(input("Enter your guess: "))
-        attempts += 1
-        if user_guess < LOWER_BOUND or user_guess > UPPER_BOUND:
-            print(f"Please guess a number within the range of {LOWER_BOUND} to {UPPER_BOUND}.")
-            continue
-        if user_guess < NUMBER_TO_GUESS:
-            print("Too low! Try again.")
-        elif user_guess > NUMBER_TO_GUESS:
-            print("Too high! Try again.")
+        playerGuess = int(input("Please Enter Your Guess: "))
+        print(numberToGuess)
+        currentAttempts +=1
+        if playerGuess == 0:
+            return False
+        if playerGuess < lowerBound or playerGuess > upperBound:
+            print(f'Please Enter a number within the range of {lowerBound} and {upperBound}')
+            return None
+        if playerGuess < numberToGuess:
+            print('Too Low!')
+        elif playerGuess > numberToGuess:
+            print('Too High!')
         else:
-            print(f"Congratulations! You've guessed the number {NUMBER_TO_GUESS} correctly in {attempts} attempts.")
-            GAME_RUNNING = False
+            print(f"You are Correct! It is {numberToGuess}.You did it in {currentAttempts} attempts!")
+            if playAgain():
+                 return False
     except ValueError:
-        print("Invalid input. Please enter a valid integer.")
+        print('Invalid Input')
+
+def playAgain():
+    global numberToGuess
+    while True:
+        try:
+            continuePlaying = input('Do you want to play again? Y/N: ')
+            if continuePlaying.upper() == 'Y' or continuePlaying.upper() == 'N':
+                if continuePlaying.upper() == 'Y':
+                    numberToGuess = random.randint(lowerBound, upperBound)
+                    return False
+                else:
+                    return True
+            else:
+                print("Please Enter Y or N only")
+        except ValueError:
+            print("Please enter Y or N only!")
+
+
+def main():
+    global exitCondition
+    while gameRunning:
+       exitCondition = playerInput()
+       if exitCondition == False:
+         print("Exiting The Game....")
+         break
+if __name__ == "__main__":
+    main()
